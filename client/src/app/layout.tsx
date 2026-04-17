@@ -38,8 +38,8 @@ const geistMono = Geist_Mono({
  */
 export const metadata: Metadata = {
   title: {
-    default: "Route Planner",
-    template: "%s | Route Planner",
+    default: "Afeka Trips Route 2026",
+    template: "%s | Afeka Trips Route 2026",
   },
   description: "Plan your hiking and cycling adventures with AI-powered route suggestions",
   keywords: ["hiking", "cycling", "trails", "route planning", "outdoor", "adventure", "AI"],

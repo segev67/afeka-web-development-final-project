@@ -40,7 +40,7 @@ export default function HomePage() {
           {/* Main Title */}
           <h1 className="text-5xl md:text-7xl font-extrabold mb-6 animate-fade-in" style={{animationDelay: '0.1s'}}>
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-emerald-100 to-white">
-              Route Planner
+              Afeka Trips Route 2026
             </span>
           </h1>
 
