@@ -787,6 +787,12 @@ All token refresh logic is centralized in **one** place — `proxy.ts`.
 - If image loading fails, the UI falls back to Picsum — random placeholders that are not location-specific.
 - **Mitigation:** configure an Unsplash API key for accurate, realistic images.
 
+### 3. Non-Deterministic LLM Output (Route Validation)
+- Gemini is non-deterministic — even with `responseMimeType: 'application/json'` and an explicit schema in the prompt, it occasionally omits a required field on a landmark (most commonly the `name` field on a `majorLandmarks` entry), which then fails the client-side validation in `validateRouteData()` (`client/src/lib/gemini.ts`).
+- Symptom: the user sees a "Failed to generate a valid route…" message and the Vercel logs show `Route N: Landmark missing name`.
+- **Mitigation:** `generateRoutePlan()` (`client/src/app/planning/actions.ts`) retries generation up to 3 times on validation failure before surfacing an error. In practice this resolves the issue silently on the second attempt; the user-visible error only appears if all 3 attempts fail in a row.
+- Lowering `temperature` or adding function-calling / strict structured-output would reduce the frequency further, but the underlying non-determinism is a property of the LLM, not the code.
+
 ---
 
 ## License

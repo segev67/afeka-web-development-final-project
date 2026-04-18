@@ -39,21 +39,26 @@ export async function generateRoutePlan(
       console.log(`   User preferences: ${userNotes}`);
     }
 
-    // Step 1: Generate route with Gemini
-    const routeData = await generateRoute(location, tripType, durationDays, userNotes);
+    // Steps 1+2: Generate + validate, with retry on LLM non-determinism
+    const MAX_ATTEMPTS = 3;
+    let routeData: Awaited<ReturnType<typeof generateRoute>> = null;
+
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      console.log(`Route generation attempt ${attempt}/${MAX_ATTEMPTS}...`);
+      const candidate = await generateRoute(location, tripType, durationDays, userNotes);
+
+      if (candidate && validateRouteData(candidate)) {
+        routeData = candidate;
+        break;
+      }
+
+      console.warn(`Attempt ${attempt} produced invalid route data, retrying...`);
+    }
 
     if (!routeData) {
       return {
         success: false,
-        message: 'Failed to generate route. Please try again.',
-      };
-    }
-
-    // Step 2: Validate route data
-    if (!validateRouteData(routeData)) {
-      return {
-        success: false,
-        message: 'Generated route is invalid. Please try different parameters.',
+        message: 'Failed to generate a valid route after multiple attempts. Please try different parameters.',
       };
     }
 
