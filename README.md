@@ -774,30 +774,18 @@ All token refresh logic is centralized in **one** place — `proxy.ts`.
 
 ## Known Issues
 
-### 1. AI Image Loading
-- External image APIs (Unsplash, Pollinations.ai) may load slowly or fail.
-- Mitigation: 3-tier fallback (Unsplash → Pollinations → Picsum).
-- Impact: minimal — users always see an image.
+### 1. Very Long Trips (Multi-Day Routes)
+- For trips of ~10+ days, the Gemini response may become too long and get truncated before completing the JSON.
+- The system attempts to repair truncated JSON and removes incomplete days.
+- As a result, users may receive fewer days than requested (e.g., 10–11 instead of 12).
+- A more compact prompt is used for long trips, but the exact day count cannot be guaranteed.
+- **Mitigation:** users can retry generation or choose a shorter trip duration.
 
-### 2. OSRM Routing for Remote Locations
-- OSRM's public demo service may not have complete data for very remote hiking trails.
-- Mitigation: waypoints remain visible on the map even if the routing line fails; text route information is always complete.
-- Impact: low — primarily affects the visual route line.
-
-### 3. Gemini AI Response Variability
-- The model may occasionally return routes with an incorrect day count or malformed JSON.
-- Mitigation: defensive JSON parsing (markdown fence stripping, truncated-bracket repair) plus validation that filters invalid responses; users can regenerate.
-- Impact: low.
-
-### 4. Weather API Rate Limits
-- OpenWeatherMap free tier has request limits.
-- Mitigation: weather is fetched only on demand, not pre-cached.
-- Impact: minimal for normal usage.
-
-### 5. Map Marker Visibility
-- Default Leaflet / Leaflet Routing Machine markers can interfere with the custom numbered waypoints.
-- Mitigation: CSS rules hide the default markers while preserving the custom ones.
-- Impact: resolved.
+### 2. Images (Country / Route Photos)
+- **Primary option (optional):** Unsplash provides real photographs but requires `UNSPLASH_ACCESS_KEY`.
+- **Fallback:** Pollinations generates AI-based images that may look generic or not match the location precisely.
+- If image loading fails, the UI falls back to Picsum — random placeholders that are not location-specific.
+- **Mitigation:** configure an Unsplash API key for accurate, realistic images.
 
 ---
 
