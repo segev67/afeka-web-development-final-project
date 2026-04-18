@@ -1,4 +1,4 @@
-# Route Planner
+# Afeka Trips Route 2026
 
 **Final Project - Web Platform Development - Semester A 2026**
 
@@ -6,21 +6,22 @@ A comprehensive web application for planning hiking and cycling routes using AI-
 
 ---
 
-## 👥 Project Team
+## Project Team
 
 - **Course**: Web Platform Development
 - **Semester**: A, 2026
+- **Students**: _TODO: add full names and student IDs_
 
 ---
 
-## 🌐 Live Deployment
+## Live Deployment
 
-- **Application URL**: [Cloud URL - To be added]
-- **GitHub Repository**: [Your GitHub URL]
+- **Application URL**: _TODO: add Vercel URL_
+- **GitHub Repository**: _TODO: add GitHub URL_
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [Project Overview](#project-overview)
 2. [Architecture](#architecture)
@@ -36,27 +37,27 @@ A comprehensive web application for planning hiking and cycling routes using AI-
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
-Route Planner is a full-stack web application that enables users to plan personalized hiking and cycling routes using artificial intelligence. The system generates realistic routes based on user preferences, displays them on interactive maps with actual road/trail paths, and provides real-time weather forecasts for upcoming trips.
+Afeka Trips Route 2026 is a full-stack web application that enables users to plan personalized hiking and cycling routes using artificial intelligence. The system generates realistic routes based on user preferences, displays them on interactive maps with actual road/trail paths, and provides real-time weather forecasts for upcoming trips.
 
 ### Core Functionality
 
 1. **AI-Powered Route Planning**: Generate custom routes using Google Gemini AI
-2. **Realistic Path Rendering**: Routes follow actual roads/trails using OSRM routing engine and Leaflet.js
+2. **Realistic Path Rendering**: Routes follow actual roads/trails using the OSRM routing engine and Leaflet.js
 3. **Weather Integration**: 3-day forecasts from OpenWeatherMap API
-4. **Route Management**: Save and retrieve routes with personalized notes from MongoDB database
+4. **Route Management**: Save and retrieve routes with personalized notes from MongoDB
 5. **Secure Authentication**: JWT-based authentication with silent token refresh
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 The application follows a **two-server architecture**:
 
 ### Server 1: Express.js Authentication Server (Port 4000)
 
-**Purpose**: User authentication, authorization, and JWT token management
+**Purpose**: User authentication, authorization, and JWT token management.
 
 **Responsibilities**:
 - User registration with bcrypt password hashing (salt rounds: 10)
@@ -71,19 +72,19 @@ The application follows a **two-server architecture**:
 - Refresh tokens: 7 days (long-lived for convenience)
 - Token rotation on refresh (one-time use refresh tokens)
 - Password hashing with bcrypt (10 salt rounds)
-- HttpOnly cookies with sameSite protection (CSRF prevention)
+- httpOnly cookies with sameSite protection (CSRF prevention)
 
 **Technologies**:
-- Node.js + Express.js
+- Node.js + Express 5
 - MongoDB + Mongoose (user data storage)
 - bcrypt (password hashing)
 - jsonwebtoken (JWT generation and verification)
-- cookie-parser (HTTP-only cookie management)
+- cookie-parser (httpOnly cookie management)
 - CORS (cross-origin resource sharing)
 
 ### Server 2: Next.js Application Server (Port 3000)
 
-**Purpose**: Main application interface and business logic
+**Purpose**: Main application interface and business logic.
 
 **Responsibilities**:
 - User interface (React components with TypeScript)
@@ -92,50 +93,50 @@ The application follows a **two-server architecture**:
 - Interactive map visualization (Leaflet.js + OSRM)
 - Route storage and retrieval (MongoDB)
 - Weather API integration (OpenWeatherMap)
-- Authentication middleware (JWT validation and silent refresh via Proxy)
+- Authentication proxy (JWT validation and silent refresh via `proxy.ts` — the Next.js 16 replacement for `middleware.ts`)
 - Image generation with fallback cascade (Unsplash → Pollinations → Picsum)
 
 **Technologies**:
-- Next.js 15 (App Router, Edge Runtime)
+- Next.js 16 (App Router, Edge Runtime, `proxy.ts`)
 - React 19
 - TypeScript
 - Tailwind CSS (styling)
 - Leaflet.js + Leaflet Routing Machine (maps)
-- OSRM plugin (realistic routing)
+- OSRM public demo service (realistic routing)
 
 ### Database: MongoDB
 
-**Purpose**: Persistent data storage
+**Purpose**: Persistent data storage.
 
 **Collections**:
-- `users`: User accounts (username, email, hashed passwords)
-- `routes`: Saved hiking/cycling routes with full details, weather data, and user notes
+- `users`: User accounts (username, email, hashed passwords) — managed by the auth server
+- `routes`: Saved hiking/cycling routes with full details, weather data, and user notes — managed by the Next.js server
 
 ---
 
-## 💻 Technologies Used
+## Technologies Used
 
 ### Backend
-- **Express.js** - Authentication server
+- **Express 5** - Authentication server
 - **Node.js** - Runtime environment
 - **MongoDB** - NoSQL database
 - **Mongoose** - ODM for MongoDB
-- **bcrypt** - Password encryption with salt
+- **bcrypt** - Password hashing with salt
 - **jsonwebtoken** - JWT implementation
 - **CORS** - Cross-origin resource sharing
 
 ### Frontend
-- **Next.js 15** - React framework with App Router
+- **Next.js 16** - React framework with App Router (`proxy.ts` instead of `middleware.ts`)
 - **React 19** - UI library
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Utility-first styling
 
 ### APIs & Services
-- **Google Gemini AI** - Route generation with natural language processing
+- **Google Gemini AI** (`gemini-3.1-flash-lite-preview`) - Route generation with natural language processing
 - **Leaflet.js** - Interactive maps with OpenStreetMap tiles
 - **Leaflet Routing Machine** - Route visualization with turn-by-turn directions
 - **OSRM** - Open Source Routing Machine (realistic path calculation)
-- **OpenWeatherMap API** - Real-time weather forecasts
+- **OpenWeatherMap API** - Real-time weather forecasts (`/data/2.5/forecast` 5-day/3-hour endpoint)
 - **Unsplash API** - High-quality location images (primary)
 - **Pollinations.ai** - AI-generated images (fallback)
 - **Picsum.photos** - Placeholder images (final fallback)
@@ -143,27 +144,26 @@ The application follows a **two-server architecture**:
 ### Development Tools
 - **ESLint** - Code linting
 - **Git** - Version control
-- **VS Code** - Development environment
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 ### 1. User Authentication & Security
 - **Registration**: Secure password hashing with bcrypt (10 salt rounds)
 - **Login**: JWT-based authentication with httpOnly cookies
 - **Server Actions**: Next.js Server Actions handle login/register (server-side cookie setting)
 - **Token Architecture**:
-  - Access tokens: 15 minutes (HMAC-SHA256 with JWT_SECRET)
-  - Refresh tokens: 7 days (HMAC-SHA256 with JWT_REFRESH_SECRET)
+  - Access tokens: 15 minutes (HMAC-SHA256 with `JWT_SECRET`)
+  - Refresh tokens: 7 days (HMAC-SHA256 with `JWT_REFRESH_SECRET`)
   - Separate secrets for defense in depth
-- **Silent Token Refresh**: Automatic token renewal via Proxy middleware (single refresh interceptor)
+- **Silent Token Refresh**: Automatic token renewal via the Next.js 16 `proxy.ts` (single refresh interceptor)
 - **Token Rotation**: New refresh token issued on each refresh
-- **Secure Cookies**: 
+- **Secure Cookies**:
   - httpOnly (JavaScript cannot access - XSS protection)
-  - sameSite=none in production (cross-domain support for Vercel)
-  - secure in production (HTTPS only)
-- **Client-side JWT Decoding**: Next.js Proxy middleware decodes tokens (no signature verification on client)
+  - `sameSite=none` in production (cross-domain support for Vercel)
+  - `secure` in production (HTTPS only)
+- **Client-side JWT Decoding**: `proxy.ts` decodes tokens (no signature verification on the client)
 - **Server-side JWT Verification**: Auth server fully verifies signatures with secrets
 
 ### 2. AI-Powered Route Planning
@@ -174,7 +174,7 @@ The application follows a **two-server architecture**:
   - Optional user notes (custom preferences injected into AI prompt)
 
 - **AI Generation**:
-  - Routes generated by Google Gemini AI (Gemini 3.1-lite-preview)
+  - Routes generated by Google Gemini AI (`gemini-3.1-flash-lite-preview`)
   - Real place names and landmarks
   - Narrative turn-by-turn directions
   - Distance calculations per day
@@ -187,25 +187,25 @@ The application follows a **two-server architecture**:
 ### 3. Interactive Maps with Realistic Routing
 - **Leaflet.js Integration**: Interactive map display
 - **Realistic Paths**: Routes follow actual roads/trails (not straight lines)
-- **OSRM Routing**: Uses Open Source Routing Machine
-- **Route Profiles**: 
+- **OSRM Routing**: Uses Open Source Routing Machine (`https://router.project-osrm.org/route/v1`)
+- **Route Profiles**:
   - `bike` profile for cycling routes
   - `foot` profile for hiking trails
 - **Numbered Waypoints**: Visual markers for major landmarks
-- **Zoom to Day**: Click daily route to zoom to specific segment
+- **Zoom to Day**: Click a daily route to zoom to the specific segment
 
 ### 4. Weather Forecasting
-- **3-Day Forecast**: Next 3 days starting tomorrow
-- **OpenWeatherMap API**: Real-time weather data
-- **Per-Route Weather**: Forecast for route starting point
+- **3-Day Forecast**: Three upcoming days from OpenWeatherMap's 5-day/3-hour endpoint (midday sample preferred)
+- **Per-Route Weather**: Forecast for the route starting point
 - **Detailed Information**:
   - Temperature (current, high, low)
   - Weather conditions
   - Humidity
   - Wind speed
+- **Shown only after route approval** (per spec — the approval page itself does not show weather)
 
 ### 5. Route Management
-- **Save Routes**: Store generated routes to MongoDB with auto-generated titles
+- **Save Routes**: Store generated routes in MongoDB with auto-generated titles
 - **Route History**: View all previously saved routes with filter options
 - **Filtering**: Filter by trip type (all/trek/bicycle) and sort by various criteria
 - **Route Details**: Full route information with fresh weather data on each view
@@ -215,12 +215,12 @@ The application follows a **two-server architecture**:
 - **Primary Source**: Unsplash API for high-quality, location-specific photographs
 - **AI Fallback**: Pollinations.ai for AI-generated images if Unsplash fails
 - **Final Fallback**: Picsum.photos for deterministic placeholder images
-- **Deterministic**: Same location = same image (consistent experience)
+- **Deterministic**: Same location → same image (consistent experience)
 - **Location-Specific**: Images characteristic of the country/region
 
 ---
 
-## 📥 Installation Guide
+## Installation Guide
 
 ### Prerequisites
 
@@ -233,7 +233,7 @@ The application follows a **two-server architecture**:
 
 ```bash
 git clone [YOUR_GITHUB_URL]
-cd afeka_webdevelopment_26a_final_proj
+cd afeka_webdevelopment_26a_final_project
 ```
 
 ### Step 2: Install Dependencies
@@ -252,7 +252,7 @@ npm install
 
 ---
 
-## ⚙️ Environment Configuration
+## Environment Configuration
 
 ### Auth Server Environment Variables
 
@@ -298,7 +298,6 @@ Create `client/.env.local`:
 NEXT_PUBLIC_AUTH_SERVER_URL=http://localhost:4000
 
 # JWT Expiration (OPTIONAL - defaults to 15m and 7d if not set)
-# Only needed if you want different expiration times than the defaults
 # JWT_EXPIRES_IN=15m
 # JWT_REFRESH_EXPIRES_IN=7d
 
@@ -324,14 +323,14 @@ MONGODB_URI=mongodb://localhost:27017/hiking-routes
 
 #### 1. Google Gemini API Key (Required)
 1. Visit https://makersuite.google.com/app/apikey
-2. Sign in with Google account
+2. Sign in with a Google account
 3. Click "Create API Key"
 4. Copy the key to `GEMINI_API_KEY`
 
 #### 2. OpenWeatherMap API Key (Required)
 1. Visit https://openweathermap.org/api
-2. Sign up for free account
-3. Go to "API keys" section
+2. Sign up for a free account
+3. Go to "API keys"
 4. Generate a new key
 5. Copy to `OPENWEATHERMAP_API_KEY`
 
@@ -340,13 +339,12 @@ MONGODB_URI=mongodb://localhost:27017/hiking-routes
 2. Create a developer account
 3. Create a new application
 4. Copy the Access Key to `UNSPLASH_ACCESS_KEY`
-5. Note: Without this, app falls back to Pollinations.ai and Picsum
+5. Without this, the app falls back to Pollinations.ai and Picsum
 
 #### 4. MongoDB Setup
 
 **Option A: Local MongoDB**
 ```bash
-# Install MongoDB locally
 # macOS:
 brew install mongodb-community
 brew services start mongodb-community
@@ -360,15 +358,15 @@ sudo systemctl start mongodb
 
 **Option B: MongoDB Atlas (Recommended)**
 1. Visit https://www.mongodb.com/cloud/atlas
-2. Create free account
+2. Create a free account
 3. Create a cluster (free tier available)
-4. Get connection string
+4. Get the connection string
 5. Replace `<password>` with your database user password
 6. Use the connection string in `MONGODB_URI`
 
 ---
 
-## 🚀 Running the Application
+## Running the Application
 
 ### Step 1: Start MongoDB
 
@@ -381,20 +379,43 @@ brew services start mongodb-community
 sudo systemctl start mongodb
 ```
 
-**If using MongoDB Atlas:** No action needed (cloud-hosted)
+**If using MongoDB Atlas:** No action needed (cloud-hosted).
 
 ### Step 2: Start the Auth Server
 
 ```bash
 cd auth-server
-npm start
+npm run dev
 ```
 
 Expected output:
 ```
-🚀 Auth Server Starting...
-✅ MongoDB connected successfully
-🔒 Auth Server running on port 4000
+==================================================
+Connected to MongoDB
+   Database: localhost
+==================================================
+Auth Server Running
+==================================================
+   Port:        4000
+   Environment: development
+   Health:      http://localhost:4000/health
+   API Base:    http://localhost:4000/auth
+==================================================
+Endpoints:
+   POST /auth/register  - Register new user
+   POST /auth/login     - Login user
+   POST /auth/refresh   - Refresh access token
+   GET  /auth/verify    - Verify token
+   POST /auth/logout    - Logout user
+==================================================
+Security Features:
+   bcrypt password hashing with salt
+   JWT authentication
+   httpOnly cookies for refresh tokens
+   CORS protection
+==================================================
+
+Waiting for requests...
 ```
 
 ### Step 3: Start the Next.js Client
@@ -406,9 +427,9 @@ npm run dev
 
 Expected output:
 ```
-▲ Next.js 15.x.x
+▲ Next.js 16.x.x
 - Local: http://localhost:3000
-- Ready in 2.3s
+- Ready in ~2s
 ```
 
 ### Step 4: Access the Application
@@ -418,93 +439,92 @@ Open your browser and navigate to:
 http://localhost:3000
 ```
 
-### Default Test User (Development Only)
+### Creating a Test User
 
-For testing, you can register a new user or use these test credentials if seeded:
-- Username: `testuser`
-- Password: `Test123!`
+The app does not ship with seeded users. Register a new account from `/register` and then log in through `/login`.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
-afeka_webdevelopment_26a_final_proj/
+afeka_webdevelopment_26a_final_project/
 │
-├── auth-server/                    # Express.js Authentication Server
+├── auth-server/                      # Express.js Authentication Server
 │   ├── src/
 │   │   ├── controllers/
-│   │   │   └── authController.ts   # Login, register, token refresh
+│   │   │   └── authController.ts     # register, login, refreshToken, verifyToken, logout
+│   │   ├── middleware/
+│   │   │   └── authMiddleware.ts     # `protect` middleware for Bearer JWTs
 │   │   ├── models/
-│   │   │   └── User.ts             # Mongoose user schema
+│   │   │   └── User.ts               # Mongoose user schema + bcrypt pre-save hook
+│   │   ├── routes/
+│   │   │   └── authRoutes.ts         # /auth/register | /login | /refresh | /verify | /logout
 │   │   ├── utils/
-│   │   │   └── tokenUtils.ts       # JWT generation/verification
-│   │   ├── db.ts                   # MongoDB connection
-│   │   └── index.ts                # Express server entry point
-│   ├── .env                        # Environment variables
+│   │   │   └── tokenUtils.ts         # JWT generation + verification + cookie options
+│   │   └── index.ts                  # Express entry point + inline MongoDB connection
+│   ├── .env                          # Environment variables (gitignored)
 │   ├── package.json
 │   └── tsconfig.json
 │
-├── client/                         # Next.js Application
+├── client/                           # Next.js 16 Application
 │   ├── src/
-│   │   ├── app/                    # App Router pages
-│   │   │   ├── page.tsx            # Homepage
+│   │   ├── app/                      # App Router pages
+│   │   │   ├── page.tsx              # Homepage (hero: "Afeka Trips Route 2026")
+│   │   │   ├── layout.tsx            # Root layout + metadata
 │   │   │   ├── auth/
-│   │   │   │   └── actions.ts      # Auth Server Actions (NEW)
+│   │   │   │   └── actions.ts        # Auth Server Actions (login/register/logout/getCurrentUser)
 │   │   │   ├── planning/
-│   │   │   │   ├── page.tsx        # Route planning page
-│   │   │   │   └── actions.ts      # Server actions
+│   │   │   │   ├── page.tsx          # Route planning page
+│   │   │   │   └── actions.ts        # generateRoutePlan, saveRoute
 │   │   │   ├── history/
-│   │   │   │   ├── page.tsx        # Routes history
+│   │   │   │   ├── page.tsx          # Routes history list + filter/sort
+│   │   │   │   ├── actions.ts
 │   │   │   │   └── [id]/
-│   │   │   │       └── page.tsx    # Route detail page
+│   │   │   │       ├── page.tsx      # Route detail page (fresh weather per view)
+│   │   │   │       └── RouteDetailClient.tsx
 │   │   │   ├── login/
-│   │   │   │   └── page.tsx        # Login page
+│   │   │   │   └── page.tsx
 │   │   │   ├── register/
-│   │   │   │   └── page.tsx        # Register page
-│   │   │   └── layout.tsx          # Root layout
+│   │   │   │   └── page.tsx
+│   │   │   └── error.tsx             # App Router error boundary
 │   │   │
 │   │   ├── components/
-│   │   │   ├── Navbar.tsx          # Navigation component
-│   │   │   ├── RouteMap.tsx        # Leaflet map with routing
-│   │   │   └── ImageWithFallback.tsx # Image with error handling
+│   │   │   ├── Navbar.tsx            # Navigation with getCurrentUser()
+│   │   │   ├── RouteMap.tsx          # Leaflet map + leaflet-routing-machine + OSRM
+│   │   │   └── ImageWithFallback.tsx # Image with 3-tier fallback
 │   │   │
 │   │   ├── lib/
-│   │   │   ├── gemini.ts           # AI route generation
-│   │   │   ├── weather.ts          # Weather API integration
-│   │   │   ├── images.ts           # Image generation
-│   │   │   ├── db.ts               # MongoDB connection
+│   │   │   ├── gemini.ts             # AI route generation + defensive JSON parsing
+│   │   │   ├── weather.ts            # OpenWeatherMap /forecast integration
+│   │   │   ├── images.ts             # Unsplash → Pollinations → Picsum cascade
+│   │   │   ├── db.ts                 # Mongoose connection (cached on global for serverless)
 │   │   │   └── models/
-│   │   │       └── Route.ts        # Mongoose route schema
+│   │   │       └── Route.ts          # Mongoose route schema (nested sub-schemas)
 │   │   │
 │   │   ├── types/
-│   │   │   └── index.ts            # TypeScript types
+│   │   │   └── index.ts              # Shared TypeScript types
 │   │   │
-│   │   └── proxy.ts                # Middleware for auth
+│   │   └── proxy.ts                  # Next.js 16 proxy (renamed from middleware.ts)
 │   │
-│   ├── .env.local                  # Environment variables
+│   ├── .env.local                    # Environment variables (gitignored)
 │   ├── package.json
 │   ├── next.config.ts
 │   └── tailwind.config.ts
 │
-├── Documentation/                  # Project documentation
-│   ├── REQUIREMENTS_CHECKLIST.md  # Requirements compliance
-│   ├── ROUTING_IMPLEMENTATION.md  # Realistic routing explanation
-│   ├── WEATHER_REQUIREMENT_COMPLIANCE.md
-│   ├── SILENT_TOKEN_REFRESH.md    # Token refresh implementation
-│   └── ...
-│
-└── README.md                       # This file
+└── README.md                         # This file
 ```
 
 ---
 
-## 📡 API Documentation
+## API Documentation
 
 ### Auth Server Endpoints
 
+All auth server responses follow the shape `{ success, message, data? }`.
+
 #### POST `/auth/register`
-Register a new user
+Register a new user.
 
 **Request:**
 ```json
@@ -515,82 +535,94 @@ Register a new user
 }
 ```
 
-**Response:**
+**Response (201):**
 ```json
 {
   "success": true,
   "message": "User registered successfully",
-  "user": {
-    "id": "string",
-    "username": "string",
-    "email": "string"
+  "data": {
+    "user": {
+      "id": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "accessToken": "jwt-token"
   }
 }
 ```
 
+**Cookies set by auth server:** `refreshToken` (httpOnly, 7 days).
+
 #### POST `/auth/login`
-Authenticate user and receive JWT tokens
+Authenticate a user and receive JWT tokens.
 
 **Request:**
 ```json
 {
-  "username": "string",
+  "email": "string",
   "password": "string"
 }
 ```
 
-**Response:**
+**Response (200):**
 ```json
 {
   "success": true,
   "message": "Login successful",
-  "accessToken": "jwt-token",
-  "user": {
-    "id": "string",
-    "username": "string",
-    "email": "string"
+  "data": {
+    "user": {
+      "id": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "accessToken": "jwt-token"
   }
 }
 ```
 
-**Cookies Set:**
-- `accessToken`: HTTP-only, 15-minute expiration
-- `refreshToken`: HTTP-only, 7-day expiration
+**Cookies set by auth server:** `refreshToken` (httpOnly, 7 days).
+The `accessToken` is returned in the JSON body and is then stored as an httpOnly cookie by the Next.js Server Action (`loginAction`).
 
 #### POST `/auth/refresh`
-Refresh access token using refresh token
+Refresh an access token using the refresh token cookie.
 
-**Request:** Refresh token in HTTP-only cookie
+**Request:** `refreshToken` in httpOnly cookie (no body).
 
-**Response:**
+**Response (200):**
 ```json
 {
   "success": true,
-  "accessToken": "new-jwt-token"
+  "message": "Token refreshed successfully",
+  "data": {
+    "accessToken": "new-jwt-token"
+  }
 }
 ```
 
-#### POST `/auth/verify`
-Verify if access token is valid
+**Cookies set by auth server:** new rotated `refreshToken` (httpOnly, 7 days).
 
-**Request:** Access token in HTTP-only cookie
+#### GET `/auth/verify`
+Verify that an access token is valid. Protected — requires `Authorization: Bearer <accessToken>` header (enforced by the `protect` middleware).
 
-**Response:**
+**Response (200):**
 ```json
 {
   "success": true,
-  "user": {
-    "userId": "string",
-    "username": "string",
-    "email": "string"
+  "message": "Token is valid",
+  "data": {
+    "user": {
+      "userId": "string",
+      "username": "string",
+      "email": "string"
+    }
   }
 }
 ```
 
 #### POST `/auth/logout`
-Logout user and clear tokens
+Logout the user and clear the refresh token cookie.
 
-**Response:**
+**Response (200):**
 ```json
 {
   "success": true,
@@ -603,13 +635,9 @@ Logout user and clear tokens
 #### Authentication Actions (`client/src/app/auth/actions.ts`)
 
 ##### `loginAction(email, password)`
-Login user and set httpOnly cookies (Server Action)
+Login user and set httpOnly cookies (Server Action).
 
-**Parameters:**
-- `email`: string
-- `password`: string
-
-**Returns:** 
+**Returns:**
 ```typescript
 {
   success: boolean,
@@ -621,42 +649,34 @@ Login user and set httpOnly cookies (Server Action)
 }
 ```
 
-**Side Effects:** Sets httpOnly cookies for accessToken and refreshToken
+**Side effects:** sets httpOnly cookies for `accessToken` and forwards `refreshToken` from the auth server response.
 
 ##### `registerAction(username, email, password)`
-Register new user and set httpOnly cookies (Server Action)
-
-**Returns:** Same as loginAction
+Register a new user and set httpOnly cookies (Server Action). Same return shape as `loginAction`.
 
 ##### `getCurrentUser()`
-Get current authenticated user (Server Action)
-
-**Returns:** `User | null` by reading httpOnly cookies server-side
+Get the current authenticated user (Server Action). Reads the `accessToken` httpOnly cookie, verifies it against the auth server, and returns `User | null`.
 
 ##### `logoutAction()`
-Logout user and clear cookies (Server Action)
+Logout the user and clear cookies (Server Action).
 
 #### Route Planning Actions (`client/src/app/planning/actions.ts`)
 
-#### `generateRoutePlan(formData)`
-Generate a new route using AI
+##### `generateRoutePlan(formData)`
+Generate a new route using AI.
 
-**Parameters:**
-- `location`: string
-- `tripType`: "trek" | "bicycle"
-- `durationDays`: number (1-30)
-- `userNotes`: string (optional custom preferences)
+**Parameters:** `location`, `tripType ∈ {trek, bicycle}`, `durationDays (1-30)`, `userNotes (optional)`.
 
-**Returns:** RouteGenerationResult with routes, weather, image, and auto-generated title
+**Returns:** `RouteGenerationResult` with routes, weather, image, and auto-generated title.
 
-#### `saveRoute(routePlan, userId, username)`
-Save a generated route to database
+##### `saveRoute(routePlan, userId, username)`
+Save a generated route to the database.
 
-**Returns:** { success: boolean, routeId?: string }
+**Returns:** `{ success: boolean, routeId?: string }`.
 
 ---
 
-## 🔐 Security Implementation
+## Security Implementation
 
 ### JWT Architecture
 
@@ -664,13 +684,13 @@ Save a generated route to database
 1. **Access Token** (15 minutes)
    - Used for API authentication
    - Signed with `JWT_SECRET` using HMAC-SHA256
-   - Stored in httpOnly cookie
+   - Stored in httpOnly cookie (set by the Next.js Server Action)
    - Short-lived for security
 
 2. **Refresh Token** (7 days)
    - Used only to obtain new access tokens
    - Signed with `JWT_REFRESH_SECRET` (separate secret for defense in depth)
-   - Stored in httpOnly cookie
+   - Stored in httpOnly cookie (set by the auth server)
    - Rotated on each use (one-time use tokens)
 
 ### JWT Structure
@@ -678,114 +698,109 @@ Save a generated route to database
 ```
 HEADER.PAYLOAD.SIGNATURE
 
-Header:  {"alg":"HS256","typ":"JWT"}         (Base64 encoded)
-Payload: {"userId":"123","exp":1709483400}   (Base64 encoded)
-Signature: HMACSHA256(header+payload, SECRET) (Cryptographic signature)
+Header:    {"alg":"HS256","typ":"JWT"}          (Base64 encoded)
+Payload:   {"userId":"...","username":"...","email":"...","iat":...,"exp":...}
+Signature: HMACSHA256(header + "." + payload, SECRET)
 ```
 
-**Important**: JWTs are **SIGNED**, not encrypted. Anyone can decode and read the payload (it's Base64), but only the server with the secret can verify the signature and create valid tokens.
+JWTs are **signed, not encrypted**. Anyone can decode and read the payload (it is Base64), but only a party with the secret can produce a valid signature.
 
 ### Authentication Flow
 
 **Login Flow:**
-1. **User Login**:
-   - User submits credentials on login page
-   - `loginAction()` Server Action calls auth server
-   - Auth server validates with bcrypt
-   - Auth server generates access + refresh tokens
-   - Auth server sets `refreshToken` as httpOnly cookie
-   - `loginAction()` receives `accessToken` in response
-   - `loginAction()` sets `accessToken` as httpOnly cookie
-   - User redirected to homepage
+1. User submits credentials on the login page.
+2. `loginAction()` Server Action calls the auth server `/auth/login`.
+3. Auth server validates the password with bcrypt.
+4. Auth server generates `accessToken` + `refreshToken`.
+5. Auth server sets `refreshToken` as an httpOnly cookie and returns `accessToken` in the JSON body.
+6. `loginAction()` forwards the `refreshToken` cookie into the browser response and sets `accessToken` as its own httpOnly cookie.
+7. User is redirected to the homepage.
 
-2. **Protected Route Access**:
-   - User navigates to protected route (e.g., /planning)
-   - Next.js Proxy middleware intercepts request
-   - Proxy reads `accessToken` from httpOnly cookie (server-side)
-   - Proxy decodes token and checks expiration
-   - If valid → Allow access
-   - If expired → Trigger silent refresh (see below)
+**Protected Route Access:**
+1. User navigates to a protected route (e.g., `/planning`).
+2. `proxy.ts` (Next.js 16 edge proxy) intercepts the request.
+3. Proxy reads `accessToken` from the httpOnly cookie (server-side).
+4. Proxy decodes the token and checks the expiration.
+5. If valid → allow access. If expired → trigger silent refresh (below).
 
-3. **Silent Refresh** (automatic, every ~15 minutes):
-   - Access token expires
-   - Proxy middleware detects expiration
-   - Proxy calls auth server `/auth/refresh` with `refreshToken` cookie
-   - Auth server **verifies** refresh token signature (server-side)
-   - Auth server generates new access + refresh tokens
-   - Auth server returns new tokens
-   - Proxy sets new `accessToken` cookie
-   - User continues seamlessly (never notices refresh)
+**Silent Refresh** (automatic, every ~15 minutes):
+1. Access token expires.
+2. `proxy.ts` detects expiration.
+3. Proxy calls auth server `/auth/refresh` with the `refreshToken` cookie.
+4. Auth server verifies the refresh token signature server-side.
+5. Auth server generates a new `accessToken` + rotated `refreshToken`.
+6. Proxy sets the new `accessToken` cookie on the response and forwards the rotated `refreshToken`.
+7. User continues seamlessly.
 
-4. **User State in Navbar**:
-   - Navbar calls `getCurrentUser()` Server Action
-   - Server Action reads `accessToken` from httpOnly cookie
-   - Server Action calls auth server `/auth/verify`
-   - Returns user info or null
-   - Navbar displays username or login button
+**User State in Navbar:**
+1. Navbar calls `getCurrentUser()` Server Action.
+2. Server Action reads `accessToken` from the httpOnly cookie.
+3. Server Action calls auth server `/auth/verify`.
+4. Returns user info or null.
+5. Navbar displays the username or a login button.
 
 ### Single Refresh Interceptor Pattern
 
-**Best Practice:** All token refresh logic is centralized in ONE place - the Proxy middleware.
+All token refresh logic is centralized in **one** place — `proxy.ts`.
 
-- ✅ Proxy middleware: Handles ALL token refresh
-- ✅ Server Actions: Only validate tokens, never refresh
-- ✅ Clean separation of concerns
-- ✅ Follows industry best practices
+- Proxy: handles all token refresh.
+- Server Actions: only validate tokens, never refresh.
+- Clean separation of concerns.
 
 ### Why Two Different Secrets?
 
-**Defense in Depth Strategy:**
-- If `JWT_SECRET` is compromised → Attacker can forge access tokens
-- BUT attacker still cannot forge refresh tokens (need `JWT_REFRESH_SECRET`)
-- Limits the blast radius of a security breach
-- Access tokens rotate every 15 minutes, refresh tokens every 7 days
+**Defense in depth:**
+- If `JWT_SECRET` is compromised → attacker can forge access tokens.
+- The attacker still cannot forge refresh tokens (they need `JWT_REFRESH_SECRET`).
+- Limits the blast radius of a secret compromise.
+- Access tokens rotate every 15 minutes; refresh tokens every 7 days.
 
 ### Security Best Practices Implemented
 
-✅ **Password Hashing**: bcrypt with 10 salt rounds  
-✅ **httpOnly Cookies**: JavaScript cannot access tokens (XSS protection)  
-✅ **sameSite Cookies**: 'none' in production with secure flag (cross-domain + CSRF protection)  
-✅ **Secure Cookies**: HTTPS only in production  
-✅ **Token Rotation**: New refresh token on each refresh  
-✅ **Short-lived Access Tokens**: 15 minutes (minimize exposure)  
-✅ **Separate Secrets**: Access and refresh tokens use different signing keys  
-✅ **Client-side Decoding Only**: No signature verification on client (Proxy middleware)  
-✅ **Server-side Verification**: Full JWT signature verification on auth server  
-✅ **Server Actions**: Cookie management happens server-side (can set httpOnly)  
-✅ **Single Refresh Interceptor**: ONE place handles token refresh (Proxy middleware)  
-✅ **Optimistic UI**: Navbar prevents jitter during token expiration  
+- Password hashing with bcrypt (10 salt rounds)
+- httpOnly cookies (JavaScript cannot access tokens — XSS protection)
+- `sameSite=none` cookies in production with `secure` flag (cross-domain + CSRF protection)
+- Secure cookies (HTTPS only in production)
+- Token rotation — new refresh token on each refresh
+- Short-lived access tokens (15 minutes)
+- Separate signing secrets for access and refresh tokens
+- Client-side decoding only in `proxy.ts` — no signature verification on the client
+- Server-side full JWT signature verification on the auth server
+- Cookie management inside Server Actions so cookies can be set httpOnly
+- Single refresh interceptor in `proxy.ts`
+- Optimistic Navbar to prevent jitter during token expiration
 
 ---
 
-## ⚠️ Known Issues
+## Known Issues
 
 ### 1. AI Image Loading
-- **Issue**: External image APIs (Unsplash, Pollinations.ai) may load slowly or fail
-- **Mitigation**: 3-tier fallback system (Unsplash → Pollinations → Picsum)
-- **Impact**: Minimal - users always see an image
+- External image APIs (Unsplash, Pollinations.ai) may load slowly or fail.
+- Mitigation: 3-tier fallback (Unsplash → Pollinations → Picsum).
+- Impact: minimal — users always see an image.
 
 ### 2. OSRM Routing for Remote Locations
-- **Issue**: OSRM may not have complete data for very remote hiking trails
-- **Mitigation**: Waypoints remain visible on map even if routing line fails; route text information is always complete
-- **Impact**: Low - primarily affects visual route line
+- OSRM's public demo service may not have complete data for very remote hiking trails.
+- Mitigation: waypoints remain visible on the map even if the routing line fails; text route information is always complete.
+- Impact: low — primarily affects the visual route line.
 
 ### 3. Gemini AI Response Variability
-- **Issue**: AI may occasionally generate routes with incorrect day count or format
-- **Mitigation**: Validation logic filters invalid responses; users can regenerate routes
-- **Impact**: Low - retry mechanism handles edge cases
+- The model may occasionally return routes with an incorrect day count or malformed JSON.
+- Mitigation: defensive JSON parsing (markdown fence stripping, truncated-bracket repair) plus validation that filters invalid responses; users can regenerate.
+- Impact: low.
 
 ### 4. Weather API Rate Limits
-- **Issue**: OpenWeatherMap free tier has request limits
-- **Mitigation**: Fetches weather only on demand (not pre-cached)
-- **Impact**: Minimal - sufficient for normal usage patterns
+- OpenWeatherMap free tier has request limits.
+- Mitigation: weather is fetched only on demand, not pre-cached.
+- Impact: minimal for normal usage.
 
 ### 5. Map Marker Visibility
-- **Issue**: Default Leaflet/Routing Machine markers may interfere with custom numbered waypoints
-- **Mitigation**: CSS rules to hide unwanted markers while preserving custom ones
-- **Impact**: Resolved - custom markers display correctly
+- Default Leaflet / Leaflet Routing Machine markers can interfere with the custom numbered waypoints.
+- Mitigation: CSS rules hide the default markers while preserving the custom ones.
+- Impact: resolved.
 
 ---
 
-## 📄 License
+## License
 
 This project is submitted as coursework for Web Platform Development, Afeka College of Engineering, 2026.
