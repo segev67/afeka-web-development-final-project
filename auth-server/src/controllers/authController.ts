@@ -31,17 +31,17 @@ import {
 export const register = async (req: Request, res: Response): Promise<void> => {
   const startTime = Date.now();
 
-  console.log('\n🔐 [REGISTER] Request received');
+  console.log('\n[REGISTER] Request received');
 
   try {
     const { username, email, password } = req.body;
 
-    console.log('🔐 [REGISTER] Attempting registration...');
+    console.log('[REGISTER] Attempting registration...');
     console.log(`   Username: ${username}`);
 
     // Validate required fields
     if (!username || !email || !password) {
-      console.log('❌ [REGISTER] Validation failed: Missing required fields');
+      console.log('[REGISTER] Validation failed: Missing required fields');
       res.status(400).json({
         success: false,
         message: 'Please provide username, email, and password',
@@ -50,11 +50,11 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Check if user already exists
-    console.log('🔍 [REGISTER] Checking if user exists...');
+    console.log('[REGISTER] Checking if user exists...');
     const existingUser = await User.findOne({ email: email.toLowerCase() });
 
     if (existingUser) {
-      console.log(`⚠️  [REGISTER] User already exists (email hidden for security)`);
+      console.log(`[REGISTER] User already exists (email hidden for security)`);
       res.status(409).json({
         success: false,
         message: 'User with this email already exists',
@@ -63,16 +63,16 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Create new user with bcrypt-hashed password
-    console.log('🔒 [REGISTER] Creating user with hashed password...');
+    console.log('[REGISTER] Creating user with hashed password...');
     const user = await User.create({
       username,
       email,
       password,
     });
-    console.log(`✅ [REGISTER] User created with ID: ${user._id}`);
+    console.log(`[REGISTER] User created with ID: ${user._id}`);
 
     // Generate JWT tokens
-    console.log('🎫 [REGISTER] Generating JWT tokens...');
+    console.log('[REGISTER] Generating JWT tokens...');
     const tokenPayload: TokenPayload = {
       userId: user._id.toString(),
       username: user.username,
@@ -81,15 +81,15 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const accessToken = generateAccessToken(tokenPayload);
     const refreshToken = generateRefreshToken(tokenPayload);
-    console.log('✅ [REGISTER] Tokens generated');
+    console.log('[REGISTER] Tokens generated');
 
     // Set refresh token in httpOnly cookie
     res.cookie('refreshToken', refreshToken, getRefreshTokenCookieOptions());
-    console.log('🍪 [REGISTER] Refresh token set in httpOnly cookie');
+    console.log('[REGISTER] Refresh token set in httpOnly cookie');
 
     // Return success response with access token
     const duration = Date.now() - startTime;
-    console.log(`✅ [REGISTER] Registration successful for ${username} (${duration}ms)`);
+    console.log(`[REGISTER] Registration successful for ${username} (${duration}ms)`);
 
     res.status(201).json({
       success: true,
@@ -105,7 +105,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     });
   } catch (error) {
     const duration = Date.now() - startTime;
-    console.error(`❌ [REGISTER] Registration error (${duration}ms):`, error);
+    console.error(`[REGISTER] Registration error (${duration}ms):`, error);
 
     // Handle Mongoose validation errors
     if (error instanceof Error && error.name === 'ValidationError') {
@@ -143,11 +143,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
-    console.log('🔑 [LOGIN] Attempting login...');
+    console.log('[LOGIN] Attempting login...');
 
     // Validate required fields
     if (!email || !password) {
-      console.log('❌ [LOGIN] Validation failed: Missing credentials');
+      console.log('[LOGIN] Validation failed: Missing credentials');
       res.status(400).json({
         success: false,
         message: 'Please provide email and password',
@@ -156,12 +156,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Find user by email
-    console.log('🔍 [LOGIN] Searching for user in database...');
+    console.log('[LOGIN] Searching for user in database...');
     const user = await User.findOne({ email: email.toLowerCase() });
 
     // Generic error message prevents user enumeration
     if (!user) {
-      console.log(`⚠️  [LOGIN] User not found (email hidden for security)`);
+      console.log(`[LOGIN] User not found (email hidden for security)`);
       res.status(401).json({
         success: false,
         message: 'Invalid email or password',
@@ -169,14 +169,14 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    console.log(`✅ [LOGIN] User found: ${user.username}`);
+    console.log(`[LOGIN] User found: ${user.username}`);
 
     // Compare password using bcrypt
-    console.log('🔒 [LOGIN] Verifying password...');
+    console.log('[LOGIN] Verifying password...');
     const isPasswordValid = await user.comparePassword(password);
 
     if (!isPasswordValid) {
-      console.log(`❌ [LOGIN] Invalid password (user hidden for security)`);
+      console.log(`[LOGIN] Invalid password (user hidden for security)`);
       res.status(401).json({
         success: false,
         message: 'Invalid email or password',
@@ -184,10 +184,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    console.log('✅ [LOGIN] Password verified');
+    console.log('[LOGIN] Password verified');
 
     // Generate tokens
-    console.log('🎫 [LOGIN] Generating JWT tokens...');
+    console.log('[LOGIN] Generating JWT tokens...');
     const tokenPayload: TokenPayload = {
       userId: user._id.toString(),
       username: user.username,
@@ -196,15 +196,15 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     const accessToken = generateAccessToken(tokenPayload);
     const refreshToken = generateRefreshToken(tokenPayload);
-    console.log('✅ [LOGIN] Tokens generated');
+    console.log('[LOGIN] Tokens generated');
 
     // Set refresh token in httpOnly cookie
     res.cookie('refreshToken', refreshToken, getRefreshTokenCookieOptions());
-    console.log('🍪 [LOGIN] Refresh token set in httpOnly cookie');
+    console.log('[LOGIN] Refresh token set in httpOnly cookie');
 
     // Return success response
     const duration = Date.now() - startTime;
-    console.log(`✅ [LOGIN] Login successful for ${user.username} (${duration}ms)`);
+    console.log(`[LOGIN] Login successful for ${user.username} (${duration}ms)`);
 
     res.status(200).json({
       success: true,
@@ -220,7 +220,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     });
   } catch (error) {
     const duration = Date.now() - startTime;
-    console.error(`❌ [LOGIN] Login error (${duration}ms):`, error);
+    console.error(`[LOGIN] Login error (${duration}ms):`, error);
     res.status(500).json({
       success: false,
       message: 'An error occurred during login',
@@ -241,13 +241,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 export const refreshToken = async (req: Request, res: Response): Promise<void> => {
   const startTime = Date.now();
   try {
-    console.log('🔄 [REFRESH] Token refresh requested...');
+    console.log('[REFRESH] Token refresh requested...');
 
     // Get refresh token from cookie
     const token = req.cookies.refreshToken;
 
     if (!token) {
-      console.log('❌ [REFRESH] No refresh token found in cookies');
+      console.log('[REFRESH] No refresh token found in cookies');
       res.status(401).json({
         success: false,
         message: 'Refresh token not found',
@@ -257,16 +257,16 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
     }
 
     // Verify refresh token
-    console.log('🔍 [REFRESH] Verifying refresh token...');
+    console.log('[REFRESH] Verifying refresh token...');
     const decoded = verifyRefreshToken(token);
-    console.log(`✅ [REFRESH] Token valid for user: ${decoded.username}`);
+    console.log(`[REFRESH] Token valid for user: ${decoded.username}`);
 
     // Verify user still exists in database
-    console.log('🔍 [REFRESH] Checking if user still exists...');
+    console.log('[REFRESH] Checking if user still exists...');
     const user = await User.findById(decoded.userId);
 
     if (!user) {
-      console.log(`❌ [REFRESH] User not found: ${decoded.userId}`);
+      console.log(`[REFRESH] User not found: ${decoded.userId}`);
       res.status(401).json({
         success: false,
         message: 'User not found',
@@ -275,10 +275,10 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
-    console.log(`✅ [REFRESH] User verified: ${user.username}`);
+    console.log(`[REFRESH] User verified: ${user.username}`);
 
     // Generate new tokens
-    console.log('🎫 [REFRESH] Generating new tokens...');
+    console.log('[REFRESH] Generating new tokens...');
     const tokenPayload: TokenPayload = {
       userId: user._id.toString(),
       username: user.username,
@@ -288,13 +288,13 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
     const newAccessToken = generateAccessToken(tokenPayload);
     const newRefreshToken = generateRefreshToken(tokenPayload);
     res.cookie('refreshToken', newRefreshToken, getRefreshTokenCookieOptions());
-    console.log('✅ [REFRESH] New tokens generated');
-    console.log('🍪 [REFRESH] New refresh token set');
+    console.log('[REFRESH] New tokens generated');
+    console.log('[REFRESH] New refresh token set');
 
     // Return new access token
     const duration = Date.now() - startTime;
     if (process.env.NODE_ENV !== 'production') {
-      console.log(`✅ [REFRESH] Silent refresh successful for ${user.username} (${duration}ms)`);
+      console.log(`[REFRESH] Silent refresh successful for ${user.username} (${duration}ms)`);
     }
 
     res.status(200).json({
@@ -306,10 +306,10 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
     });
   } catch (error) {
     const duration = Date.now() - startTime;
-    console.error(`❌ [REFRESH] Token refresh error (${duration}ms):`, error);
+    console.error(`[REFRESH] Token refresh error (${duration}ms):`, error);
 
     res.clearCookie('refreshToken');
-    console.log('🗑️  [REFRESH] Invalid token cleared from cookies');
+    console.log('[REFRESH] Invalid token cleared from cookies');
 
     res.status(401).json({
       success: false,
@@ -329,7 +329,7 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
  */
 export const verifyToken = async (req: Request, res: Response): Promise<void> => {
   if (process.env.NODE_ENV !== 'production') {
-    console.log(`✅ [VERIFY] Token verified for user: ${req.user?.username}`);
+    console.log(`[VERIFY] Token verified for user: ${req.user?.username}`);
   }
 
   res.status(200).json({
@@ -350,7 +350,7 @@ export const verifyToken = async (req: Request, res: Response): Promise<void> =>
  * Clears the refresh token cookie.
  */
 export const logout = async (req: Request, res: Response): Promise<void> => {
-  console.log('👋 [LOGOUT] User logging out...');
+  console.log('[LOGOUT] User logging out...');
 
   res.clearCookie('refreshToken', {
     httpOnly: true,
@@ -359,8 +359,8 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
     path: '/',
   });
 
-  console.log('✅ [LOGOUT] Refresh token cleared');
-  console.log('✅ [LOGOUT] Logout successful');
+  console.log('[LOGOUT] Refresh token cleared');
+  console.log('[LOGOUT] Logout successful');
 
   res.status(200).json({
     success: true,

@@ -111,7 +111,7 @@ async function refreshAccessToken(refreshToken: string): Promise<{ accessToken: 
   try {
     const authServerUrl = process.env.NEXT_PUBLIC_AUTH_SERVER_URL || 'http://localhost:5001';
 
-    console.log('[Proxy] 🔄 Access token expired, attempting silent refresh...');
+    console.log('[Proxy] Access token expired, attempting silent refresh...');
     console.log(`[Proxy] Auth server URL: ${authServerUrl}/auth/refresh`);
 
     const response = await fetch(`${authServerUrl}/auth/refresh`, {
@@ -126,7 +126,7 @@ async function refreshAccessToken(refreshToken: string): Promise<{ accessToken: 
     console.log(`[Proxy] Auth server response status: ${response.status}`);
 
     if (!response.ok) {
-      console.log('[Proxy] ❌ Token refresh failed:', response.status, response.statusText);
+      console.log('[Proxy] Token refresh failed:', response.status, response.statusText);
       return null;
     }
 
@@ -136,7 +136,7 @@ async function refreshAccessToken(refreshToken: string): Promise<{ accessToken: 
     console.log(`[Proxy] Response data has accessToken: ${!!accessToken}`);
 
     if (accessToken) {
-      console.log('[Proxy] ✅ Token refreshed successfully (silent)');
+      console.log('[Proxy] Token refreshed successfully (silent)');
 
       const setCookieHeader = response.headers.get('set-cookie');
       let newRefreshToken: string | undefined;
@@ -145,7 +145,7 @@ async function refreshAccessToken(refreshToken: string): Promise<{ accessToken: 
         const refreshTokenMatch = setCookieHeader.match(/refreshToken=([^;]+)/);
         if (refreshTokenMatch) {
           newRefreshToken = refreshTokenMatch[1];
-          console.log('[Proxy] 🔄 Refresh token rotated');
+          console.log('[Proxy] Refresh token rotated');
         }
       }
 
@@ -155,10 +155,10 @@ async function refreshAccessToken(refreshToken: string): Promise<{ accessToken: 
       };
     }
 
-    console.log('[Proxy] ❌ No accessToken in response data');
+    console.log('[Proxy] No accessToken in response data');
     return null;
   } catch (error) {
-    console.error('[Proxy] ❌ Error refreshing token:', error);
+    console.error('[Proxy] Error refreshing token:', error);
     return null;
   }
 }
@@ -218,7 +218,7 @@ export async function proxy(request: NextRequest) {
             });
           }
 
-          console.log(`[Proxy] ✅ Silent refresh successful, allowing access to ${pathname}`);
+          console.log(`[Proxy] Silent refresh successful, allowing access to ${pathname}`);
           return response;
         }
       }
@@ -267,7 +267,7 @@ export async function proxy(request: NextRequest) {
             });
           }
 
-          console.log(`[Proxy] ✅ Token refreshed silently, allowing access to ${pathname}`);
+          console.log(`[Proxy] Token refreshed silently, allowing access to ${pathname}`);
           return response;
         }
       }

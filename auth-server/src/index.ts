@@ -75,14 +75,7 @@ app.use(cookieParser());
 
 // Log all incoming requests for debugging (without sensitive data)
 app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log(`\n📥 ${req.method} ${req.path}`);
-  if (req.body && Object.keys(req.body).length > 0) {
-    const sanitizedBody = { ...req.body };
-    // Remove sensitive fields
-    if (sanitizedBody.password) sanitizedBody.password = '[REDACTED]';
-    if (sanitizedBody.email) sanitizedBody.email = '[REDACTED]';
-    console.log(`   Body (sanitized): ${JSON.stringify(sanitizedBody)}`);
-  }
+  console.log(`\n${req.method} ${req.path}`);
   next();
 });
 
@@ -104,14 +97,14 @@ async function ensureMongoConnection() {
       throw new Error('MONGODB_URI environment variable is not defined');
     }
 
-    console.log('🔌 Connecting to MongoDB...');
+    console.log('Connecting to MongoDB...');
     await mongoose.connect(MONGODB_URI, {
       serverSelectionTimeoutMS: 5000,
     });
     isMongoConnected = true;
-    console.log('✅ MongoDB connected');
+    console.log('MongoDB connected');
   } catch (error: any) {
-    console.error('❌ MongoDB connection failed:', error.message);
+    console.error('MongoDB connection failed:', error.message);
     throw error;
   }
 }
@@ -138,7 +131,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
-  console.log('🏥 Health check requested');
+  console.log('Health check requested');
   res.status(200).json({
     status: 'ok',
     server: 'auth-server',
@@ -188,38 +181,37 @@ if (process.env.NODE_ENV !== 'production') {
     .connect(process.env.MONGODB_URI as string)
     .then(() => {
       console.log('\n' + '='.repeat(50));
-      console.log('✅ Connected to MongoDB');
+      console.log('Connected to MongoDB');
       console.log('   Database:', process.env.MONGODB_URI?.split('@')[1]?.split('?')[0] || 'localhost');
       console.log('='.repeat(50));
 
       // Start server only after DB connection is established
       app.listen(PORT, () => {
-        console.log('\n' + '🚀'.repeat(25));
-        console.log(`🚀 Auth Server Running`);
+        console.log(`Auth Server Running`);
         console.log('='.repeat(50));
         console.log(`   Port:        ${PORT}`);
         console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);
         console.log(`   Health:      http://localhost:${PORT}/health`);
         console.log(`   API Base:    http://localhost:${PORT}/auth`);
         console.log('='.repeat(50));
-        console.log('📡 Endpoints:');
+        console.log('Endpoints:');
         console.log('   POST /auth/register  - Register new user');
         console.log('   POST /auth/login     - Login user');
         console.log('   POST /auth/refresh   - Refresh access token');
         console.log('   GET  /auth/verify    - Verify token');
         console.log('   POST /auth/logout    - Logout user');
         console.log('='.repeat(50));
-        console.log('🔒 Security Features:');
-        console.log('   ✅ bcrypt password hashing with salt');
-        console.log('   ✅ JWT authentication');
-        console.log('   ✅ httpOnly cookies for refresh tokens');
-        console.log('   ✅ CORS protection');
+        console.log('Security Features:');
+        console.log('   bcrypt password hashing with salt');
+        console.log('   JWT authentication');
+        console.log('   httpOnly cookies for refresh tokens');
+        console.log('   CORS protection');
         console.log('='.repeat(50) + '\n');
-        console.log('👂 Waiting for requests...\n');
+        console.log('Waiting for requests...\n');
       });
     })
     .catch((error) => {
-      console.error('\n❌ MongoDB connection failed:', error.message);
+      console.error('\nMongoDB connection failed:', error.message);
       process.exit(1);
     });
 }

@@ -157,7 +157,7 @@ export async function registerAction(
             maxAge: refreshMaxAge,
           });
 
-          console.log('[registerAction] ✅ Forwarded refreshToken cookie to browser');
+          console.log('[registerAction] Forwarded refreshToken cookie to browser');
         }
       }
     }
@@ -222,12 +222,12 @@ export async function loginAction(
             maxAge: refreshMaxAge,
           });
 
-          console.log('[loginAction] ✅ Forwarded refreshToken cookie to browser');
+          console.log('[loginAction] Forwarded refreshToken cookie to browser');
         } else {
-          console.warn('[loginAction] ⚠️ No refreshToken found in Set-Cookie header');
+          console.warn('[loginAction] No refreshToken found in Set-Cookie header');
         }
       } else {
-        console.warn('[loginAction] ⚠️ No Set-Cookie header from auth server');
+        console.warn('[loginAction] No Set-Cookie header from auth server');
       }
     }
 
