@@ -10,14 +10,12 @@ A comprehensive web application for planning hiking and cycling routes using AI-
 
 - **Course**: Web Platform Development
 - **Semester**: A, 2026
-- **Students**: _TODO: add full names and student IDs_
 
 ---
 
 ## Live Deployment
 
-- **Application URL**: _TODO: add Vercel URL_
-- **GitHub Repository**: _TODO: add GitHub URL_
+- **Application URL**: https://project-hiking.vercel.app
 
 ---
 
