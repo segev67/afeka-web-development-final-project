@@ -255,6 +255,7 @@ export async function logoutAction(): Promise<void> {
     // Clear accessToken cookie
     const cookieStore = await cookies();
     cookieStore.delete('accessToken');
+    cookieStore.delete('refreshToken');
   } catch (error) {
     console.error('Logout error:', error);
   }
